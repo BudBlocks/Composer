@@ -67,7 +67,7 @@ transaction sendNote {
   o DateTime expiration_date
 }
 transaction resolveNote {
-  --> Note note
+  o String note
 }
 
 event AccountFrozen {  // if you try to give a note but your account is frozen
