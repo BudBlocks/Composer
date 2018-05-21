@@ -26,12 +26,12 @@ participant Consumer identified by ID {
   o Integer notes_sent //needed for creating the ids of notes
 
   // private information specific to the person
-  --> Note[] notes
-  --> Note[] outgoing_notes
-  --> Note earliest_note  // one of the outgoing notes
+  --> Note[] notes optional
+  --> Note[] outgoing_notes optional
+  --> Note earliest_note  optional // one of the outgoing notes
 
   // public credit information
-  o Integer times_overdue
+  o Integer times_overdue 
   o Double average_time_overdue
 }
 
@@ -45,7 +45,7 @@ asset Note identified by ID {
 
   o String field
   o Integer amount
-  o DateTime expiration_date
+  o DateTime expiration_date 
   o DateTime date_sent
 }
 
