@@ -18,7 +18,12 @@
 
 # bna files
 *.bna
-*.card
+# *.card
+node-report.*
+
+# emacs files
+*~
+\#*
 
 npm-debug.log*
 yarn-debug.log*
