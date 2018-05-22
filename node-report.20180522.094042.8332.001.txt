@@ -1,0 +1,210 @@
+================================================================================
+==== Node Report ===============================================================
+
+Event: exception, location: "OnUncaughtException"
+Filename: node-report.20180522.094042.8332.001.txt
+Dump event time:  2018/05/22 09:40:42
+Module load time: 2018/05/22 09:40:42
+Process ID: 8332
+Command line: node /home/waford/.nvm/versions/node/v8.11.1/bin/composer archive list -a budlocks-network@0.1.6.bna 
+
+Node.js version: v8.11.1
+(http_parser: 2.8.0, v8: 6.2.414.50, uv: 1.19.1, zlib: 1.2.11, ares: 1.10.1-DEV,
+ modules: 57, nghttp2: 1.25.0, openssl: 1.0.2o, icu: 60.1, unicode: 10.0,
+ cldr: 32.0, tz: 2017c)
+
+node-report version: 2.2.1 (built against Node.js v8.11.1, glibc 2.23, 64 bit)
+
+OS version: Linux 4.13.0-41-generic #46~16.04.1-Ubuntu SMP Thu May 3 10:06:43 UTC 2018
+(glibc: 2.23)
+
+Machine: Ubuntu16 x86_64
+
+================================================================================
+==== JavaScript Stack Trace ====================================================
+
+Object.parseArgs [as _parseArgs] (/home/waford/.nvm/versions/node/v8.11.1/lib/node_modules/composer-cli/node_modules/yargs/yargs.js:1:1)
+Object.get [as argv] (/home/waford/.nvm/versions/node/v8.11.1/lib/node_modules/composer-cli/node_modules/yargs/yargs.js:1:1)
+Object.<anonymous> (/home/waford/.nvm/versions/node/v8.11.1/lib/node_modules/composer-cli/cli.js:1:1)
+Module._compile (module.js:1:1)
+Object.Module._extensions..js (module.js:1:1)
+Module.load (module.js:1:1)
+tryModuleLoad (module.js:1:1)
+Function.Module._load (module.js:1:1)
+Function.Module.runMain (module.js:1:1)
+startup (bootstrap_node.js:1:1)
+bootstrap_node.js:1:1
+
+================================================================================
+==== Native Stack Trace ========================================================
+
+ 0: [pc=0x7f15dfa2256b] nodereport::OnUncaughtException(v8::Isolate*) [/home/waford/.nvm/versions/node/v8.11.1/lib/node_modules/composer-cli/node_modules/node-report/api.node]
+ 1: [pc=0xf1c332] v8::internal::Isolate::Throw(v8::internal::Object*, v8::internal::MessageLocation*) [node]
+ 2: [pc=0x1094a5d] v8::internal::Runtime_Throw(int, v8::internal::Object**, v8::internal::Isolate*) [node]
+ 3: [pc=0x4f7980842fd] 
+
+================================================================================
+==== JavaScript Heap and Garbage Collector =====================================
+
+Heap space name: new_space
+    Memory size: 16,777,216 bytes, committed memory: 16,700,744 bytes
+    Capacity: 8,249,344 bytes, used: 4,816,392 bytes, available: 3,432,952 bytes
+Heap space name: old_space
+    Memory size: 16,576,512 bytes, committed memory: 16,230,520 bytes
+    Capacity: 16,236,808 bytes, used: 15,950,576 bytes, available: 286,232 bytes
+Heap space name: code_space
+    Memory size: 2,097,152 bytes, committed memory: 1,397,376 bytes
+    Capacity: 1,331,840 bytes, used: 1,331,840 bytes, available: 0 bytes
+Heap space name: map_space
+    Memory size: 1,593,344 bytes, committed memory: 1,247,280 bytes
+    Capacity: 1,531,528 bytes, used: 1,212,464 bytes, available: 319,064 bytes
+Heap space name: large_object_space
+    Memory size: 5,132,288 bytes, committed memory: 5,132,288 bytes
+    Capacity: 1,462,331,968 bytes, used: 5,053,504 bytes, available: 1,457,278,464 bytes
+
+Total heap memory size: 42,176,512 bytes
+Total heap committed memory: 40,708,208 bytes
+Total used heap memory: 28,364,776 bytes
+Total available heap memory: 1,461,316,712 bytes
+
+Heap memory limit: 1,501,560,832
+
+================================================================================
+==== Resource Usage ============================================================
+
+Process total resource usage:
+  User mode CPU: 0.618607 secs
+  Kernel mode CPU: 0.032135 secs
+  Average CPU Consumption : 65.0742%
+  Maximum resident set size: 70,303,744 bytes
+  Page faults: 0 (I/O required) 16397 (no I/O required)
+  Filesystem activity: 0 reads 16 writes
+
+Event loop thread resource usage:
+  User mode CPU: 0.563621 secs
+  Kernel mode CPU: 0.032438 secs
+  Average CPU Consumption : 59.6059%
+  Filesystem activity: 0 reads 16 writes
+
+================================================================================
+==== Node.js libuv Handle Summary ==============================================
+
+(Flags: R=Ref, A=Active)
+Flags  Type      Address             Details
+[-A]   async     0x0000000002e9e100  
+[--]   check     0x00007ffed22221e0  
+[R-]   idle      0x00007ffed2222258  
+[--]   prepare   0x00007ffed22222d0  
+[--]   check     0x00007ffed2222348  
+[-A]   async     0x00000000021846a0  
+[-A]   async     0x0000000002f59b10  
+[-A]   async     0x0000000002f599f0  
+[R-]   timer     0x0000000002f24e90  repeat: 0, timeout expired: 5217118 ms ago
+[R-]   tty       0x0000000002f26458  width: 80, height: 24, file descriptor: 9, write queue size: 0, writable
+[-A]   signal    0x0000000002f24f80  signum: 28 (SIGWINCH)
+[R-]   tty       0x0000000002f25218  width: 80, height: 24, file descriptor: 11, write queue size: 0, writable
+[-A]   async     0x0000000002f59a80  
+[-A]   async     0x0000000002f22e40  
+[-A]   async     0x0000000002f22ed0  
+[-A]   async     0x0000000002f24be0  
+[-A]   async     0x0000000002f25360  
+[-A]   async     0x0000000002f978e0  
+[-A]   async     0x0000000002f24250  
+[-A]   async     0x0000000002f97310  
+[-A]   async     0x000000000300d5d0  
+[-A]   async     0x00007f15dfc2acc0  
+
+================================================================================
+==== System Information ========================================================
+
+Environment variables
+  XDG_VTNR=7
+  XDG_SESSION_ID=c4
+  CLUTTER_IM_MODULE=xim
+  XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/waford
+  NVM_CD_FLAGS=
+  GPG_AGENT_INFO=/home/waford/.gnupg/S.gpg-agent:0:1
+  SHELL=/bin/bash
+  TERM=xterm-256color
+  VTE_VERSION=4205
+  QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1
+  WINDOWID=69206331
+  UPSTART_SESSION=unix:abstract=/com/ubuntu/upstart-session/1000/2967
+  GNOME_KEYRING_CONTROL=
+  GTK_MODULES=gail:atk-bridge:unity-gtk-module
+  NVM_DIR=/home/waford/.nvm
+  USER=waford
+  LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+  QT_ACCESSIBILITY=1
+  XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session1
+  XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+  SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+  DEFAULTS_PATH=/usr/share/gconf/ubuntu.default.path
+  XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/usr/share/upstart/xdg:/etc/xdg
+  PATH=/home/waford/.nvm/versions/node/v8.11.1/bin:/home/waford/bin:/home/waford/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+  DESKTOP_SESSION=ubuntu
+  QT_IM_MODULE=ibus
+  QT_QPA_PLATFORMTHEME=appmenu-qt5
+  XDG_SESSION_TYPE=x11
+  PWD=/home/waford/budblocks-network
+  JOB=gnome-session
+  XMODIFIERS=@im=ibus
+  GNOME_KEYRING_PID=
+  LANG=en_US.UTF-8
+  GDM_LANG=en_US
+  MANDATORY_PATH=/usr/share/gconf/ubuntu.mandatory.path
+  IM_CONFIG_PHASE=1
+  COMPIZ_CONFIG_PROFILE=ubuntu
+  GDMSESSION=ubuntu
+  SESSIONTYPE=gnome-session
+  GTK2_MODULES=overlay-scrollbar
+  HOME=/home/waford
+  XDG_SEAT=seat0
+  SHLVL=1
+  LANGUAGE=en_US
+  GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+  UPSTART_INSTANCE=
+  UPSTART_EVENTS=started starting
+  XDG_SESSION_DESKTOP=ubuntu
+  LOGNAME=waford
+  QT4_IM_MODULE=xim
+  XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+  DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-OWzD6t8qdS
+  NVM_BIN=/home/waford/.nvm/versions/node/v8.11.1/bin
+  LESSOPEN=| /usr/bin/lesspipe %s
+  INSTANCE=Unity
+  UPSTART_JOB=unity-settings-daemon
+  XDG_RUNTIME_DIR=/run/user/1000
+  DISPLAY=:0
+  XDG_CURRENT_DESKTOP=Unity
+  GTK_IM_MODULE=ibus
+  LESSCLOSE=/usr/bin/lesspipe %s %s
+  XAUTHORITY=/home/waford/.Xauthority
+  _=/home/waford/.nvm/versions/node/v8.11.1/bin/composer
+  OLDPWD=/home/waford
+  SUPPRESS_NO_CONFIG_WARNING=y
+
+Resource limits                        soft limit      hard limit
+  core file size (blocks)                       0       unlimited
+  data seg size (kbytes)                unlimited       unlimited
+  file size (blocks)                    unlimited       unlimited
+  max locked memory (bytes)                 65536           65536
+  max memory size (kbytes)              unlimited       unlimited
+  open files                              1048576         1048576
+  stack size (bytes)                      8388608       unlimited
+  cpu time (seconds)                    unlimited       unlimited
+  max user processes                        30506           30506
+  virtual memory (kbytes)               unlimited       unlimited
+
+Loaded libraries
+  /lib/x86_64-linux-gnu/libdl.so.2
+  /lib/x86_64-linux-gnu/librt.so.1
+  /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+  /lib/x86_64-linux-gnu/libm.so.6
+  /lib/x86_64-linux-gnu/libgcc_s.so.1
+  /lib/x86_64-linux-gnu/libpthread.so.0
+  /lib/x86_64-linux-gnu/libc.so.6
+  /lib64/ld-linux-x86-64.so.2
+  /home/waford/.nvm/versions/node/v8.11.1/lib/node_modules/composer-cli/node_modules/node-report/api.node
+
+================================================================================
