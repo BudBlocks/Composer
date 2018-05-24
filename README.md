@@ -105,6 +105,8 @@ git fetch -p
 Finally you are ready for the pull request. **You MUST DO THIS FROM THE GITHUB UI **
 
 ![githubbranches](./media/githubbranches.png)
+![createpullrequest](./media/createpullrequest.png)
+![openpullrequest](./media/openpullrequest.png)
 
 #### Merging the code
 
