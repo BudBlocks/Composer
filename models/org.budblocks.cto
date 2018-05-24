@@ -22,28 +22,24 @@ participant Consumer identified by ID {
   //private information specific to the person
   o String ID
   o String name
-  o Integer balance
-  o Integer notes_sent //needed for creating the ids of notes
+  o Integer balance default=0
+  o Integer notes_sent default=0 //needed for creating the ids of notes
 
-  // private information specific to the person
+  // private information specific to the person. Has to be optional for initial POST
   --> Note[] notes optional
   --> Note[] outgoing_notes optional // liability
   --> Note earliest_note optional // one of the outgoing notes
 
   // public credit information
-  o Integer times_overdue
-  o Double average_time_overdue
+  o Integer[] time_over optional  // in seconds
 }
 
-// asset Proposal identified by ID {
-//   o String ID
-// }
 asset Note identified by ID {
   o String ID // sender Consumer.ID + "." + notes_sent++
   --> Consumer sender
   --> Consumer recipient
 
-  o String field
+  o String field default=""
   o Integer amount
   o DateTime expiration_date
   o DateTime date_sent
