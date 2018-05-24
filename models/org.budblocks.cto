@@ -54,8 +54,8 @@ transaction removeBalance {
   o Integer amount
 }
 transaction sendNote {
-  o String sender
-  o String recipient
+  --> Consumer sender
+  --> Consumer recipient
 
   o Integer amount
   o String field
