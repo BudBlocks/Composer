@@ -83,7 +83,7 @@ git status
 ```
 Checkin to your local repository
 ```
-git checkin -m "Your message Goes Here"
+git commit -m "Your message Goes Here"
 ```
 Push your branch to the remote repository
 ```
@@ -102,7 +102,11 @@ keep local repo in sync with deleted remote branches
 git fetch -p
 ```
 
-Finally you are ready for the pull request.  Some of the below is redundant with above, but it is ok to repeat.
+Finally you are ready for the pull request. **You MUST DO THIS FROM THE GITHUB UI **
+
+![githubbranches](./media/githubbranches.png)
+
+#### Merging the code
 
 Make sure you have the latest version of the feature branch from the remote repository
 
@@ -122,7 +126,7 @@ git merge --no-ff my-new-feature-branch
 ```
 This may throw you into vi.  Type <esc> and then :wq
 
-Now that you have merged the code, the feature branc definition is obsolete, so delete it  from local and remote repo.
+Now that you have merged the code, the feature branch definition is obsolete, so delete it  from local and remote repo.
 
 ```
 git branch -d my-new-feature-branch
