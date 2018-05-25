@@ -35,6 +35,8 @@ composer network install -a budblocks-network@<version>.bna -c peeradmin@hlfv1
 composer-rest-server -c admin@budblocks-network -p 3000
 ```
 
+## Deploying BudBlocks to IBM Cloud
+[Setup Toolchain](https://console.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/BudBlocks/Composer.git&branch=restructureForCloud&env_id=ibm%3Ayp%3Aus-south&deploy-region=ibm%3Ayp%3Aus-south)
 ### Git Instructions for branching and creating pull requests
 [This page](https://gist.github.com/blackfalcon/8428401) has great directions for this.
 To branch and submit a pull request
