@@ -53,7 +53,7 @@ git branch
 ```
 create a new branch from master branch, and set your working directory to that branch
 ```
-git checkout my-new-feature-branch master
+git checkout -b my-new-feature-branch master
 ```
 see which branch you are on
 ```
