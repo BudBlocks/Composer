@@ -15,8 +15,8 @@ services:
     service_id: githubpublic
     parameters:
       repo_name: 'budblocks-{{timestamp}}'
-      repo_url: 'https://github.com/sstone1/blockchain-starter-kit'
-      type: clone
+      repo_url: 'https://github.com/BudBlocks/Composer'
+      type: existing
       has_issues: true
       enable_traceability: true
   build:
