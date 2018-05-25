@@ -1,0 +1,124 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.budblocks
+
+participant Consumer identified by ID {
+  //private information specific to the person
+  o String ID
+  o String name
+  o Integer balance default=0
+  o Integer notes_sent default=0 //needed for creating the ids of notes
+
+  // private information specific to the person. Has to be optional for initial POST
+  --> Note[] notes optional
+  --> Note[] outgoing_notes optional // liability
+  --> Note earliest_note optional // one of the outgoing notes
+
+  // public credit information
+  o Integer[] time_over optional  // in seconds
+}
+
+asset Note identified by ID {
+  o String ID // sender Consumer.ID + "." + notes_sent++
+  --> Consumer sender
+  --> Consumer recipient
+
+  o String field default=""
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
+
+transaction addBalance {
+  o String recipient
+  o Integer amount
+}
+transaction removeBalance {
+  o String recipient
+  o Integer amount
+}
+transaction sendNote {
+  --> Consumer sender
+  --> Consumer recipient
+
+  o Integer amount
+  o String field
+
+  o DateTime expiration_date
+}
+transaction resolveNote {
+  o String note
+}
+
+event AccountFrozen {  // if you try to give a note but your account is frozen
+  o String field
+  o String recipient_name
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
+event BalanceTooLow {  // if you tried to resolve a note or remove money but your balance is too low
+  o Integer balance
+  o Integer amount
+}
+
+event NoteResolved {  // if you resolved a note you gave someone
+  o String field
+  o String recipient_name
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
+event NotePaid {  // if a note you were given was paid(resolved)
+  o String field
+  o String sender_name
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
+
+event AccountFreeze {  // if youre overdue on a note
+  o String field
+  o String recipient_name
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
+event NoteOverdue {  // if a note you were given is overdue
+  o String field
+  o String sender_name
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
+
+event NoteSent {  // if you sent a note to someone
+  o String field
+  o String recipient_name
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
+event NoteReceived {  // if you received a note from someone
+  o String field
+  o String sender_name
+  o Integer amount
+  o DateTime expiration_date
+  o DateTime date_sent
+}
