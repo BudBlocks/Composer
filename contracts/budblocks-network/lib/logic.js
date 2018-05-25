@@ -38,7 +38,7 @@ async function removeBalance(trade) {
 async function sendNote(trade) {
     // --> Consumer sender
     // --> Consumer recipient
-
+  
     // o Integer amount
     // o String field
   
@@ -49,9 +49,9 @@ async function sendNote(trade) {
 
     //emit event if the sender account is frozen
     let execute = true;
-    if (trade.sender.earliest_note != null && trade.sender.earliest_note != "") {   // not non-zero length string error contained within this block
-        let earliest_note = await assetRegistry.get(trade.sender.earliest_note);  // dereferencing
-        if ((new Date(earliest_note.expiration_date)).getTime() < (new Date(trade.timestamp)).getTime()) {
+    if (trade.sender.earliest_note != null) {   // not non-zero length string error contained within this block
+        //let earliest_note = await assetRegistry.get(trade.sender.earliest_note);  // dereferencing
+        //if ((new Date(earliest_note.expiration_date)).getTime() < (new Date(trade.timestamp)).getTime()) {
             // let event = factory.newEvent('org.budblocks', 'AccountFrozen');
             // event.field = earliest_note.field;
             // let recipient = await participantRegistry.get(earliest_note.recipient);  // dereference the recipient to get their name
@@ -61,7 +61,7 @@ async function sendNote(trade) {
             // event.date_sent = earliest_note.date_sent;
             // emit(event);
             execute = false;
-        }
+        //}
     }
     if (execute) {
         //get the factory and subID of the new note
@@ -78,7 +78,7 @@ async function sendNote(trade) {
 
         // add the note to the asset registry
         await assetRegistry.add(new_note);
-
+        
         //add the new note to the sender and receiver's notes and outgoing notes
         trade.recipient.notes.push(factory.newRelationship('org.budblocks', 'Note', new_note.ID));
         trade.sender.outgoing_notes.push(factory.newRelationship('org.budblocks', 'Note', new_note.ID));
