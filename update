@@ -1,0 +1,25 @@
+#!/bin/bash -x
+
+#Creates and upgraes the buissness network archive 
+
+##Constants
+NETWORK_NAME=0
+NETWORK_VERSION=0
+CARD=0
+
+##FUNCTIONS
+
+getJSON() {
+	if [ -f package.json ]; then
+		echo < cat package.json
+	else
+		echo "package.json does not exist"
+		exit 1
+	fi	
+}
+
+
+##Main
+echo "Test"
+
+
