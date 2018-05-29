@@ -5,7 +5,6 @@ participant Buddy identified by username {
   o String name
   o Integer notes_sent default=0
 
-  --> Balance balance optional
   --> Note[] notes_received optional
   --> Note[] notes_owed optional
   o Integer earliest_note_index default=-1
@@ -14,20 +13,15 @@ participant Buddy identified by username {
   o Integer[] amount_over optional // the amount the note was worth each time you went over
 }
 
-asset Balance identified by owner {
-  o String owner // should be the same as a userName
-  o Integer value
-  --> Note[] notes_deposited optional // all the notes others have sent which have then been resolved
-  --> Note[] notes_resolved optional // all the notes that have been sent and then resolved by removing value from this balance
-}
-asset Note identified by ID {
-  o String ID
+asset Note identified by number {
+  o String number
   --> Buddy sender
   --> Buddy reciever
 
   o Integer amount
   o String field
   o DateTime expiration_date
+  o Boolean accepted default=false
   o DateTime date_sent
 }
 
@@ -47,6 +41,9 @@ transaction sendNote {
   o String field default=""
   o DateTime expiration_date
 }
+transaction acceptNote {
+  --> Note note
+}
 transaction resolveNote {
   --> Note note
 }
@@ -65,42 +62,37 @@ event BalanceTooLow {  // if you tried to resolve a note or remove money but you
   o Integer balance
   o Integer amount
 }
-
-event NoteResolved {  // if you resolved a note you gave someone
-  o String field
-  o String recipient_name
-  o Integer amount
-  o DateTime expiration_date
-  o DateTime date_sent
-}
-event NotePaid {  // if a note you were given was paid(resolved)
-  o String field
-  o String sender_name
-  o Integer amount
-  o DateTime expiration_date
-  o DateTime date_sent
-}
-
-event AccountFreeze {  // if youre overdue on a note
-  o String field
-  o String recipient_name
-  o Integer amount
-  o DateTime expiration_date
-  o DateTime date_sent
-}
-event NoteOverdue {  // if a note you were given is overdue
-  o String field
-  o String sender_name
-  o Integer amount
-  o DateTime expiration_date
-  o DateTime date_sent
+event InvalidNote {
+  o String reason
 }
 
 event NoteSent {  // if you sent a note to someone
-  o String field
-  o String sender_name
-  o String reciever_name
+  o String sender // name
+  o String reciever // name
+
   o Integer amount
+  o String field
   o DateTime expiration_date
   o DateTime date_sent
+  o String note_number
+}
+event NoteAccepted {
+  o String sender // name
+  o String reciever // name
+
+  o Integer amount
+  o String field
+  o DateTime expiration_date
+  o DateTime date_sent
+  o String note_number
+}
+event NoteResolved {  // if you resolved a note you gave someone
+  o String sender // name
+  o String reciever // name
+
+  o Integer amount
+  o String field
+  o DateTime expiration_date
+  o DateTime date_sent
+  o String note_number
 }
