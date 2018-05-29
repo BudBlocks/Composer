@@ -1,191 +1,135 @@
 /**
- * add balance to a consumer's balance
- * @param {org.budblocks.addBalance} trade - the trade to be processed
+ * add value to a buddy's balance
+ * @param {org.replace_me.addBalance} deposit - add value to the user's balance
  * @transaction
  */
-async function addBalance(trade) {
-    let participantRegistry = await getParticipantRegistry('org.budblocks.Consumer');
-    let recipient = await participantRegistry.get(trade.recipient);
-    recipient.balance += trade.amount;
-    await participantRegistry.update(trade.recipient);
+async function addBalance(deposit) {
+    let buddy = deposit.buddy;
+
+    let balanceRegistry = await getAssetRegistry('org.replace_me.Balance');
+
+    buddy.balance.value = buddy.balance.value + deposit.amount;
+    balanceRegistry.update(buddy.balance);
+
+    // // below is with balance as o Integer balance within Buddy
+    // let buddyRegistry = await getParticipantRegistry('org.replace_me.Buddy');
+
+    // buddy.balance = buddy.balance + deposit.amount;
+    // buddyRegistry.update(buddy);
 }
 
-/**
- * remove balance from a consumer's balance
- * @param {org.budblocks.removeBalance} trade - the trade to be processed
+ /**
+ * remove value from a buddy's balance
+ * @param {org.replace_me.removeBalance} withdrawl - remove value from the user's balance
  * @transaction
  */
-async function removeBalance(trade) {
-    let participantRegistry = await getParticipantRegistry('org.budblocks.Consumer');
-    let recipient = await participantRegistry.get(trade.recipient);
-    if (trade.amount > recipient.balance) {
+async function removeBalance(withdrawl) {
+    let buddy = withdrawl.buddy;
+
+    let balanceRegistry = await getAssetRegistry('org.replace_me.Balance');
+
+    if (buddy.balance.value - withdrawl.amount < 0) {
         let factory = getFactory();
-        let event = factory.newEvent('org.budblocks', 'BalanceTooLow');
-        event.balance = recipient.balance;
-        event.amount = trade.amount;
+        let event = factory.newEvent('org.replace_me', 'balanceTooLow');
+        event.balance = buddy.balance.value;
+        event.amount = withdrawl.amount;
         emit(event);
-        return;
+        throw new Error('Balance Too Low');
     }
-    recipient.balance -= trade.amount;
-    await participantRegistry.update(recipient);
+
+    buddy.balance.value = buddy.balance.value - withdrawl.amount;
+    balanceRegistry.update(withdrawl.buddy.balance);
+
+    // // below is with balance as o Integer balance within Buddy
+    // let buddyRegistry = await getParticipantRegistry('org.replace_me.Buddy');
+
+    // if (buddy.balance - withdrawl.amount < 0) {
+    //     let factory = getFactory();
+    //     let event = factory.newEvent('org.replace_me', 'balanceTooLow');
+    //     event.balance = buddy.balance;
+    //     event.amount = withdrawl.amount;
+    //     emit(event);
+    //     throw new Error('Balance Too Low');
+    // }
+
+    // buddy.balance = buddy.balance - withdrawl.amount;
+    // buddyRegistry.update(buddy);
 }
 
-/**
- * create and send a note
- * @param {org.budblocks.sendNote} trade - the trade to be processed
+ /**
+ * send a note from one buddy to another
+ * @param {org.replace_me.sendNote} note_info - the trade to be processed
  * @transaction
  */
-async function sendNote(trade) {
-    // --> Consumer sender
-    // --> Consumer recipient
-  
-    // o Integer amount
-    // o String field
-  
-    // o DateTime expiration_date
-    let participantRegistry = await getParticipantRegistry('org.budblocks.Consumer');
-    let assetRegistry = await getAssetRegistry('org.budblocks.Note');
+async function sendNote(note_info) {
+    let sender = note_info.sender;
+    let receiver = note_info.receiver;
+
+    if (sender.username == receiver.username) {
+        throw new Error('Can\'t send note to yourself');
+    }
+
+    let noteRegistry = await getAssetRegistry('org.replace_me.Note');
     let factory = getFactory();
 
-    //emit event if the sender account is frozen
-    let execute = true;
-    if (trade.sender.earliest_note != null) {   // not non-zero length string error contained within this block
-        //let earliest_note = await assetRegistry.get(trade.sender.earliest_note);  // dereferencing
-        //if ((new Date(earliest_note.expiration_date)).getTime() < (new Date(trade.timestamp)).getTime()) {
-            // let event = factory.newEvent('org.budblocks', 'AccountFrozen');
-            // event.field = earliest_note.field;
-            // let recipient = await participantRegistry.get(earliest_note.recipient);  // dereference the recipient to get their name
-            // event.recipient_name = recipient.name;
-            // event.amount = earliest_note.amount;
-            // event.expiration_date = earliest_note.expiration_date;
-            // event.date_sent = earliest_note.date_sent;
-            // emit(event);
-            execute = false;
-        //}
-    }
-    if (execute) {
-        //get the factory and subID of the new note
-        let this_note = trade.sender.notes_sent++;
-
-        //create the new note
-        let new_note = factory.newResource('org.budblocks', 'Note', trade.sender.ID.concat('.').concat(this_note.toString()));
-        new_note.sender = factory.newRelationship('org.budblocks', 'Consumer', trade.sender.ID);
-        new_note.recipient = factory.newRelationship('org.budblocks', 'Consumer', trade.recipient.ID);
-        new_note.field = trade.field;
-        new_note.amount = trade.amount;
-        new_note.expiration_date = trade.expiration_date;
-        new_note.date_sent = trade.timestamp;
-
-        // add the note to the asset registry
-        await assetRegistry.add(new_note);
-        
-        //add the new note to the sender and receiver's notes and outgoing notes
-        trade.recipient.notes.push(factory.newRelationship('org.budblocks', 'Note', new_note.ID));
-        trade.sender.outgoing_notes.push(factory.newRelationship('org.budblocks', 'Note', new_note.ID));
-
-        //check if the note is now the new earliest note
-        // if (trade.sender.earliest_note == null) {
-        //     trade.sender.earliest_note = trade.sender.outgoing_notes[trade.sender.outgoing_notes.length-1];
-        // }
-        // else {
-        //     let earliest_note = await assetRegistry.get(trade.sender.earliest_note);
-        //     if ((new Date(new_note.expiration_date)).getTime() < (new Date(earliest_note.expiration_date)).getTime()) {
-        //         trade.sender.earliest_note = trade.sender.outgoing_notes[trade.sender.outgoing_notes.length-1];
-        //     }
-        // }
-
-        //update the Consumer participant registry
-        await participantRegistry.update(trade.sender);
-        await participantRegistry.update(trade.recipient);
-
-        //emit events to sender and recipient
-        let event = factory.newEvent('org.budblocks', 'NoteSent');
-        event.field = new_note.field;
-        event.recipient_name = trade.recipient.name;
-        event.amount = new_note.amount;
-        event.expiration_date = new_note.expiration_date;
-        event.date_sent = new_note.date_sent;
-        emit(event);
-        event = factory.newEvent('org.budblocks', 'NoteReceived');
-        event.field = new_note.field;
-        event.sender_name = trade.sender.name;
-        event.amount = new_note.amount;
-        event.expiration_date = new_note.expiration_date;
-        event.date_sent = new_note.date_sent;
-        emit(event);
-    }
-}
-
-/**
- * resolve a note
- * @param {org.budblocks.resolveNote} trade - the trade to be processed
- * @transaction
- */
-async function resolveNote(trade) {  // TODO add an update to the users dual credit score if the due date of the note has passed
-
-    // o String note
-
-    let assetRegistry = await getAssetRegistry('org.budblocks.Note');
-    let participantRegistry = await getParticipantRegistry('org.budblocks.Consumer');
-    let factory = getFactory();
-
-    let note = await assetRegistry.get(trade.note);
-    let sender = await participantRegistry.get(note.sender);
-    let recipient = await participantRegistry.get(note.recipient);
-
-    // make sure you can actually resolve the note with your current balance
-    if (sender.balance < note.amount) {
-        let event = factory.newEvent('org.budblocks', 'BalanceTooLow');
-        event.balance = sender.balance;
-        event.amount = note.amount;
-        emit(event);
-        return;
-    }
-
-    // update the sender and receiver balances, and remove the note from the registry
-    sender.balance -= note.amount;
-    recipient.balance += note.amount;
-    let noteURI = factory.newRelationship('org.budblocks', 'Note', trade.note);
-    sender.outgoing_notes.splice(sender.outgoing_notes.indexOf(noteURI), 1);
-    recipient.notes.splice(recipient.notes.indexOf(noteURI), 1);
-
-    await participantRegistry.update(sender);
-    await participantRegistry.update(recipient);
-    await assetRegistry.remove(trade.note);
-
-    // check if the note that sender just resolved was the one closest to expiration, and change if it was
-    if (noteURI == sender.earliest_note) {
-        if (sender.outgoing_notes.length == 0) {
-            sender.earliest_note = null;
-        }
-        else {
-            let new_earliest = await assetRegistry.get(sender.outgoing_notes[0]);
-            let new_earliest_i = 0;
-            for (i = 0; i < sender.outgoing_notes.length; i++) {
-                let other_note = await assetRegistry.get(sender.outgoing_notes[i]);
-                if ((new Date(new_earliest.expiration_date)).getTime() > (new Date(other_note.expiration_date)).getTime()) {
-                    new_earliest = sender.outgoing_notes[i];
-                    new_earliest_i = i;
-                }
-            }
-            sender.earliest_note = sender.outgoing_notes[new_earliest_i];
-            await participantRegistry.update(sender);
+    if (sender.earliest_note_index > -1) {
+        let earliest_note = await noteRegistry.get(sender.notes_owed[sender.earliest_note_index]); // might need to access the registry for this since lists might not be dereferenced recursively
+        if ((new Date(earliest_note.expiration_date)).getTime() < note_info.timestamp.getTime()) {  // note really sure if this is a DateTime or String but just to be safe am creating new Date from it. Unclear on how casting works here, but theoretically shouldn't be affected since Integers are fine
+            let event = factory.newEvent('org.replace_me', 'AccountFrozen');
+            event.field = earliest_note.field;
+            event.reciever_name = earliest_note.reciever.name;
+            event.amount = earliest_note.amount;
+            event.expiration_date = earliest_note.expiration_date;
+            event.date_sent = earliest_note.date_sent;
+            emit(event);
+            throw new Error('Account Frozen');
         }
     }
 
-    // create events for resolving the note, which goes to you, and paying the note which goes to the recipient
-    let event = factory.newEvent('org.budblocks', 'NoteResolved');
-    event.field = note.field;
-    event.recipient_name = recipient.name;
-    event.amount = note.amount;
-    event.expiration_date = note.expiration_date;
-    event.date_sent = note.date_sent;
-    emit(event);
-    event = factory.newEvent('org.budblocks', 'NotePaid');
-    event.field = note.field;
+    let note = factory.newResource('org.replace_me', 'Note', sender.username.concat('.').concat((sender.notes_sent++).to_string()));
+    note.sender = factory.newRelationship('org.replace_me', 'Buddy', sender.username);
+    note.receiver = factory.newRelationship('org.replace_me', 'Buddy', receiver.username);
+    note.amount = note_info.amount;
+    note.field = note_info.field;
+    note.expiration_date = note_info.expiration_date;
+    note.date_sent = note_info.timestamp;
+
+    sender.notes_sent.push(factory.newRelationship('org.replace_me', 'Note', note.ID));
+    receiver.notes_owed.push(sender.notes_sent[sender.notes_sent.length - 1]);
+
+    if (sender.earliest_note_index > -1) {
+        let earliest_note = sender.notes_owed[sender.earliest_note_index]; // might need to access the registry for this since lists might not be dereferenced recursively
+        if (expiration_date.getTime() < (new Date(earliest_note.expiration_date)).getTime()) {  // note really sure if this is a DateTime or String but just to be safe am creating new Date from it. Unclear on how casting works here, but theoretically shouldn't be affected since Integers are fine
+            sender.earliest_note_index = sender.notes_owed.length - 1;
+        }
+    }
+    else {
+        sender.earliest_note_index = 0;
+    }
+
+    let buddyRegistry = await getParticipantRegistry('org.replace_me.Buddy');
+    buddyRegistry.update(sender);
+    buddy_registry.update(recevier);
+
+    let event = factory.newEvent('org.budblocks', 'NoteSent');
+    event.field = note_info.field;
     event.sender_name = sender.name;
-    event.amount = note.amount;
-    event.expiration_date = note.expiration_date;
-    event.date_sent = note.date_sent;
+    event.reciever_name = receiver.name;
+    event.amount = note_info.amount;
+    event.expiration_date = note_info.expiration_date;
+    event.date_sent = note_info.timestamp;
     emit(event);
+}
+
+ /**
+ * resolve a note the user owes another buddy
+ * @param {org.replace_me.resolveNote} trade - the trade to be processed
+ * @transaction
+ */
+async function resolveNote(trade) {
+    let note = trade.note; // just for ease of use
+    sender = note.sender;
+    receiver = note.receiver;
+
+    
 }
