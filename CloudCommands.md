@@ -5,6 +5,22 @@
 # Add commands for upgrading the .bna files
 
 # Commands for pushing the Rest Server to Cloud
+First, you should install the IBM Cloud CLI.
+The below are from this web [page](ibmcloud dev help)
+
+For Mac and Linux:
+```
+curl -sL https://ibm.biz/idt-installer | bash
+```
+For Windows 10: Note: Open Windows PowerShell by right-clicking the PowerShell icon and selecting "Run as Administrator".
+```
+Set-ExecutionPolicy Unrestricted; iex(New-Object Net.WebClient).DownloadString('http://ibm.biz/idt-win-installer')
+```
+
+Verify installation by running the help command
+```
+ibmcloud dev help
+```
 
 Below is from blockchain-starter-kit/.bluemix/pipeline-DEPLOY.sh
 
