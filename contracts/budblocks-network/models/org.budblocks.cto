@@ -12,8 +12,8 @@ participant Buddy identified by username {
 
   o Integer earliest_note_index default=-1
 
-  o Integer[] time_over optional // the time youve been over in seconds each time you were over
-  o Integer[] amount_over optional // the amount the note was worth each time you went over
+  o Integer[] time_over default=[] // the time youve been over in seconds each time you were over
+  o Integer[] amount_over default=[] // the amount the note was worth each time you went over
 }
 
 asset Note identified by number {
