@@ -75,7 +75,7 @@ async function sendNote(note_info) {
     }
 
     let factory = getFactory();
-    let note = factory.newResource('org.budblocks', 'Note', sender.username.concat('.').concat((sender.notes_sent++).to_string()));
+    let note = factory.newResource('org.budblocks', 'Note', sender.username.concat('.').concat((sender.num_notes_sent++).to_string()));
     note.sender = factory.newRelationship('org.budblocks', 'Buddy', sender.username);
     note.receiver = factory.newRelationship('org.budblocks', 'Buddy', receiver.username);
     note.amount = note_info.amount;
@@ -86,9 +86,14 @@ async function sendNote(note_info) {
     let noteRegistry = await getAssetRegistry('org.budblocks.Note');
     noteRegistry.add(note);
 
+    receiver.notes_pending.push(factory.newRelationship('org.budblocks', 'Note', note.number));
+
+    let buddyRegistry = await getParticipantRegistry('org.budblocks.Buddy');
+    buddyRegistry.update(receiver);
+
     let event = factory.newEvent('org.budblocks', 'NoteSent');
-    event.sender = sender.name;
-    event.receiver = receiver.name;
+    event.sender = sender.username;
+    event.receiver = receiver.username;
 
     event.amount = note_info.amount;
     event.message = note_info.message;
@@ -114,8 +119,9 @@ async function acceptNote(trade) {
     noteRegistry.update(note);
 
     let factory = getFactory();
-    sender.notes_owed.push(factory.newRelationship('org.budblocks', 'Note', note.ID));
+    sender.notes_owed.push(factory.newRelationship('org.budblocks', 'Note', note.number));
     receiver.notes_received.push(sender.notes_owed[sender.notes_owed.length - 1]);
+    receiver.notes_pending.splice(receiver.notes_pending.indexOf(note));
 
     if (sender.earliest_note_index > -1) {
         let earliest_note = sender.notes_owed[sender.earliest_note_index];
@@ -132,8 +138,8 @@ async function acceptNote(trade) {
     buddyRegistry.update(receiver);
 
     let event = factory.newEvent('org.budblocks', 'NoteAccepted');
-    event.sender = sender.name;
-    event.receiver = receiver.name;
+    event.sender = sender.username;
+    event.receiver = receiver.username;
     event.amount = note.amount;
     event.message = note.message;
     event.expiration_date = note.expiration_date;
@@ -208,8 +214,8 @@ async function resolveNote(trade) {
     //emit event
     let factory = getFactory();
     let event = factory.newEvent('org.budblocks', 'NoteResolved');
-    event.sender = sender.name;
-    event.receiver = receiver.name;
+    event.sender = sender.username;
+    event.receiver = receiver.username;
     event.amount = note.amount;
     event.message = note.message;
     event.expiration_date = note.expiration_date;
