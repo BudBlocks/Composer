@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * add value to a buddy's balance
  * @param {org.budblocks.addBalance} deposit - add value to the user's balance
